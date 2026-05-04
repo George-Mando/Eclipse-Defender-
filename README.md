@@ -16,7 +16,7 @@
 <br/>
 
 <!-- CONTRIBUTION GRAPH — works automatically, no setup needed -->
-[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=George-Mando&theme=react-dark&bg_color=0d0d0d&color=00ff9c&line=00ff9c&point=ff6b35&area=true&hide_border=true)](https://github.com/George-Mando/)
+[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=George-Mando&theme=react-dark&bg_color=0d0d0d&color=00ff9c&line=00ff9c&point=ff6b35&area=true&hide_border=true)](https://github.com/Eclipse-Defender-/)
 
 </div>
 
@@ -30,7 +30,7 @@
 
 > *While you're here — systems are initializing at XenClipse Studios.*
 
-[![ENTER HIVE INTERFACE](https://img.shields.io/badge/▶_ENTER_HIVE_CONTROL_PANEL-00ff9c?style=for-the-badge&logoColor=black&labelColor=000000)](https://george-mando.github.io/George-Mando/)
+[![ENTER HIVE INTERFACE](https://img.shields.io/badge/▶_ENTER_HIVE_CONTROL_PANEL-00ff9c?style=for-the-badge&logoColor=black&labelColor=000000)](https://george-mando.github.io/Eclipse-Defender-/)
 
 **XenClipse Control Panel · Portfolio · Systems Hub**
 
