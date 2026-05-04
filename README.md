@@ -15,7 +15,7 @@
 
 <br/>
 
-[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=George-Mando&theme=react-dark&bg_color=000000&color=00e5ff&line=ff6b2a&point=ff2d78&area=true&hide_border=true)](https://github.com/George-Mando)
+[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=George-Mando&theme=react-dark&bg_color=000000&color=00e5ff&line=ff6b2a&point=ff2d78&area=true&hide_border=true)](https://github.com/Eclipse-Defender-)
 
 </div>
 
@@ -30,7 +30,7 @@
 > *Eclipse the ordinary. Build what others can't imagine.*
 
 <!-- NOTE: Replace the URL below once your GitHub Pages site is live -->
-[![ENTER PORTFOLIO](https://img.shields.io/badge/▶_ENTER_PORTFOLIO-ff6b2a?style=for-the-badge&logoColor=black&labelColor=000000)](https://george-carter.itch.io/)
+[![ENTER PORTFOLIO](https://img.shields.io/badge/▶_ENTER_PORTFOLIO-ff6b2a?style=for-the-badge&logoColor=black&labelColor=000000)]([https://george-carter.itch.io/](https://github.com/Eclipse-Defender-))
 
 **XenClipse Studios · Portfolio · Game Dev Hub**
 
