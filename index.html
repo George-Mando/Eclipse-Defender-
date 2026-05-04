@@ -1,389 +1,853 @@
-
-cat > /mnt/user-data/outputs/xenclipse-defender.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="theme-color" content="#000008"/>
-<title>XENCLIPSE · ECLIPSE DEFENDER</title>
+<meta name="theme-color" content="#000000"/>
+<title>ECLIPSE DEFENDER · XENCLIPSE STUDIOS</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:'Courier New',monospace;overflow:hidden;}
-  #wrap{position:relative;width:480px;max-width:100vw;}
-  canvas{display:block;background:#000008;cursor:crosshair;touch-action:none;width:100%;}
-  #ov{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.93);text-align:center;padding:24px;}
-  #ov h1{font-size:38px;font-weight:bold;color:#00e5ff;letter-spacing:8px;margin-bottom:6px;}
-  .xsub{font-size:11px;letter-spacing:5px;color:#ff6b2a;margin-bottom:26px;}
-  .xdesc{font-size:13px;color:#aaa;line-height:2.4;margin-bottom:28px;}
-  .xdesc .c{color:#00e5ff;} .xdesc .o{color:#ff6b2a;}
-  button{padding:14px 44px;border:2px solid #00e5ff;background:transparent;color:#00e5ff;font-family:'Courier New',monospace;font-size:14px;letter-spacing:4px;cursor:pointer;border-radius:3px;transition:all 0.2s;}
-  button:hover{background:#00e5ff;color:#000;}
-  #info{font-size:10px;color:#333;padding:5px;letter-spacing:2px;text-align:center;background:#000;}
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --cyan: #00e5ff;
+    --orange: #ff6b2a;
+    --pink: #ff2d78;
+    --gold: #ffaa00;
+    --black: #000000;
+    --dark: #050510;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Share Tech Mono', monospace;
+    overflow: hidden;
+  }
+
+  #wrap {
+    position: relative;
+    width: 500px;
+    max-width: 100vw;
+  }
+
+  canvas {
+    display: block;
+    background: var(--black);
+    cursor: crosshair;
+    touch-action: none;
+    width: 100%;
+    border: 1px solid rgba(0,229,255,0.15);
+    box-shadow: 0 0 60px rgba(0,229,255,0.08), 0 0 120px rgba(255,107,42,0.05);
+  }
+
+  /* ── OVERLAY ── */
+  #ov {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.94);
+    text-align: center;
+    padding: 28px 20px;
+  }
+
+  /* Eclipse logo SVG */
+  .eclipse-logo {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 12px;
+  }
+
+  .studio-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+
+  #ov h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 30px;
+    font-weight: 900;
+    color: var(--cyan);
+    letter-spacing: 4px;
+    text-shadow: 0 0 30px rgba(0,229,255,0.6);
+    margin-bottom: 6px;
+    line-height: 1.1;
+  }
+
+  .sub {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--orange);
+    margin-bottom: 22px;
+    opacity: 0.85;
+  }
+
+  .desc-box {
+    border: 1px solid rgba(0,229,255,0.2);
+    background: rgba(0,229,255,0.04);
+    border-radius: 6px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    max-width: 340px;
+  }
+
+  .desc-box p {
+    font-size: 12px;
+    color: #aaa;
+    line-height: 2.2;
+  }
+
+  .desc-box .c { color: var(--cyan); }
+  .desc-box .o { color: var(--orange); }
+  .desc-box .p { color: var(--pink); }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    padding: 13px 36px;
+    border: 1.5px solid var(--cyan);
+    background: transparent;
+    color: var(--cyan);
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.18s;
+    text-transform: uppercase;
+  }
+
+  button:hover {
+    background: var(--cyan);
+    color: var(--black);
+    box-shadow: 0 0 24px rgba(0,229,255,0.4);
+  }
+
+  button.orange {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  button.orange:hover {
+    background: var(--orange);
+    color: var(--black);
+    box-shadow: 0 0 24px rgba(255,107,42,0.4);
+  }
+
+  #info {
+    font-size: 10px;
+    color: #222;
+    padding: 6px;
+    letter-spacing: 2px;
+    text-align: center;
+    background: var(--black);
+    border-top: 1px solid rgba(0,229,255,0.08);
+  }
+
+  /* score flash */
+  .score-pop { animation: spop 0.3s ease-out; }
+  @keyframes spop { 0%{transform:scale(1.4)} 100%{transform:scale(1)} }
 </style>
 </head>
 <body>
 <div id="wrap">
-  <canvas id="c" width="480" height="540"></canvas>
+  <canvas id="c" width="500" height="580"></canvas>
+
   <div id="ov">
-    <h1>XENCLIPSE</h1>
-    <div class="xsub">ECLIPSE DEFENDER · XENCLIPSE STUDIOS</div>
-    <div class="xdesc">
-      Move mouse / drag to steer your ship<br>
-      <span class="c">Auto-fires cyan blasts</span> at the Xeno swarm<br>
-      <span class="o">Click / tap</span> for NOVA BOMB when charged<br>
-      Guard the Eclipse Core. Survive the waves!
+    <!-- SVG Eclipse Logo -->
+    <svg class="eclipse-logo" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="eclipseGrad" cx="65%" cy="40%" r="55%">
+          <stop offset="0%" stop-color="#ffaa00"/>
+          <stop offset="55%" stop-color="#ff6b2a"/>
+          <stop offset="100%" stop-color="#ff2d78"/>
+        </radialGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="cyanGlow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- Outer glow ring -->
+      <circle cx="45" cy="42" r="28" fill="none" stroke="rgba(0,229,255,0.12)" stroke-width="8"/>
+      <!-- Eclipse body (golden crescent) -->
+      <circle cx="45" cy="42" r="26" fill="url(#eclipseGrad)" filter="url(#glow)"/>
+      <!-- Blocking shadow circle (creates crescent) -->
+      <circle cx="52" cy="42" r="22" fill="#000000"/>
+      <!-- Cyan rim glow on crescent edge -->
+      <circle cx="45" cy="42" r="26" fill="none" stroke="rgba(0,229,255,0.35)" stroke-width="1.5" filter="url(#cyanGlow)"/>
+      <!-- Orbit dot -->
+      <circle cx="72" cy="28" r="2.5" fill="#00e5ff" opacity="0.9"/>
+    </svg>
+
+    <div class="studio-name">XENCLIPSE STUDIOS</div>
+    <h1>ECLIPSE<br/>DEFENDER</h1>
+    <div class="sub">WAVE SURVIVAL · ARCADE</div>
+
+    <div class="desc-box">
+      <p>
+        <span class="c">Move mouse / drag</span> to steer your ship<br>
+        Ship <span class="c">auto-fires cyan blasts</span> at Xeno invaders<br>
+        <span class="o">Click / tap</span> to unleash a <span class="o">NOVA BOMB</span> when charged<br>
+        <span class="p">Guard the Eclipse Core.</span> Survive the waves!
+      </p>
     </div>
-    <button id="startBtn">ENGAGE</button>
+
+    <div class="btn-row">
+      <button id="startBtn">▶ ENGAGE</button>
+    </div>
   </div>
+
   <div id="info">MOVE MOUSE &nbsp;·&nbsp; CLICK = NOVA BOMB &nbsp;·&nbsp; XENCLIPSE STUDIOS</div>
 </div>
 
 <script>
-const cv=document.getElementById('c');
-const ov=document.getElementById('ov');
-const ctx=cv.getContext('2d');
-const W=cv.width,H=cv.height;
-let running=false,mx=W/2;
-let ship,bullets,enemies,particles,score,wave,lives,novaCharge,novaActive,novaR,spawnQ,spawnTimer,waveMsg,waveMsgTimer,gameOver,waveComplete;
+const cv = document.getElementById('c');
+const ov = document.getElementById('ov');
+const ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height;
 
-function reset(){
-  ship={x:W/2,y:H-60,fireT:0};
-  bullets=[];enemies=[];particles=[];
-  score=0;wave=0;lives=3;
-  novaCharge=0;novaActive=false;novaR=0;
-  spawnQ=[];spawnTimer=0;
-  waveMsg='';waveMsgTimer=0;
-  gameOver=false;waveComplete=false;
+// Brand colors
+const CYAN   = '#00e5ff';
+const ORANGE = '#ff6b2a';
+const PINK   = '#ff2d78';
+const GOLD   = '#ffaa00';
+
+let running = false, mx = W / 2;
+let ship, bullets, enemies, particles, stars;
+let score, wave, lives, novaCharge, novaActive, novaR;
+let spawnQ, spawnTimer, waveMsg, waveMsgTimer, gameOver, waveComplete;
+
+// Generate star field
+function makeStars() {
+  stars = [];
+  for (let i = 0; i < 120; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2,
+      speed: 0.1 + Math.random() * 0.3,
+      opacity: 0.2 + Math.random() * 0.6
+    });
+  }
+}
+
+function reset() {
+  ship = { x: W / 2, y: H - 65, fireT: 0 };
+  bullets = []; enemies = []; particles = [];
+  score = 0; wave = 0; lives = 3;
+  novaCharge = 0; novaActive = false; novaR = 0;
+  spawnQ = []; spawnTimer = 0;
+  waveMsg = ''; waveMsgTimer = 0;
+  gameOver = false; waveComplete = false;
+  makeStars();
   nextWave();
 }
 
-function nextWave(){
-  wave++;waveComplete=false;
-  waveMsg='WAVE '+wave;waveMsgTimer=100;
-  const count=4+wave*2;
-  for(let i=0;i<count;i++){
-    let type=0;
-    if(wave>=2&&i%4===0)type=1;
-    if(wave>=3&&i%5===0)type=2;
-    spawnQ.push({delay:i*70+(wave>4?-wave*3:0),type});
+function nextWave() {
+  wave++; waveComplete = false;
+  waveMsg = 'WAVE ' + wave;
+  waveMsgTimer = 110;
+  const count = 5 + wave * 2;
+  for (let i = 0; i < count; i++) {
+    let type = 0;
+    if (wave >= 2 && i % 4 === 0) type = 1;
+    if (wave >= 3 && i % 5 === 0) type = 2;
+    spawnQ.push({ delay: i * 65, type });
   }
-  if(wave%5===0)spawnQ.push({delay:count*70+80,type:3});
+  if (wave % 5 === 0) spawnQ.push({ delay: count * 65 + 80, type: 3 });
 }
 
-function spawnEnemy(type){
-  const sx=40+Math.random()*(W-80);
-  if(type===3){
-    enemies.push({x:W/2,y:-70,vx:0.8,vy:0.35,r:42,hp:35+wave*6,maxHp:35+wave*6,type:3,phase:Math.random()*Math.PI*2,shootT:60,dead:false,settled:false});
+function spawnEnemy(type) {
+  const sx = 44 + Math.random() * (W - 88);
+  if (type === 3) {
+    enemies.push({ x: W / 2, y: -80, vx: 0.9, vy: 0.4, r: 44,
+      hp: 40 + wave * 7, maxHp: 40 + wave * 7, type: 3,
+      phase: Math.random() * Math.PI * 2, shootT: 55, dead: false, settled: false });
   } else {
-    const spd=0.45+wave*0.04+Math.random()*0.2;
-    const hp=type===0?1:type===1?2:3;
-    enemies.push({x:sx,y:-30,vx:(Math.random()-0.5)*0.8,vy:spd,r:type===2?20:13,hp,maxHp:hp,type,phase:Math.random()*Math.PI*2,shootT:type===2?90:99999,dead:false});
+    const spd = 0.5 + wave * 0.04 + Math.random() * 0.2;
+    const hp = type === 0 ? 1 : type === 1 ? 2 : 3;
+    enemies.push({ x: sx, y: -32, vx: (Math.random() - 0.5) * 0.9, vy: spd,
+      r: type === 2 ? 21 : 14, hp, maxHp: hp, type,
+      phase: Math.random() * Math.PI * 2, shootT: type === 2 ? 85 : 99999, dead: false });
   }
 }
 
-function nova(){
-  if(novaCharge<1||novaActive)return;
-  novaActive=true;novaR=0;novaCharge=0;
+function nova() {
+  if (novaCharge < 1 || novaActive) return;
+  novaActive = true; novaR = 0; novaCharge = 0;
 }
 
-function addParticles(px,py,col,n){
-  for(let i=0;i<n;i++){
-    const a=Math.random()*Math.PI*2,spd=1+Math.random()*3.5;
-    particles.push({x:px,y:py,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,life:1,col,r:1.5+Math.random()*3});
+function addParticles(px, py, col, n) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, spd = 1 + Math.random() * 4;
+    particles.push({ x: px, y: py, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd,
+      life: 1, col, r: 1.5 + Math.random() * 3.5 });
   }
 }
 
-function loseLife(){
-  lives--;addParticles(ship.x,ship.y,'#ff2d78',10);
-  if(lives<=0){gameOver=true;showGameOver();}
+function loseLife() {
+  lives--;
+  addParticles(ship.x, ship.y, PINK, 14);
+  if (lives <= 0) { gameOver = true; showGameOver(); }
 }
 
-function update(){
-  if(gameOver)return;
-  ship.x+=(mx-ship.x)*0.1;
-  ship.x=Math.max(20,Math.min(W-20,ship.x));
+function update() {
+  if (gameOver) return;
+
+  // Scroll stars
+  stars.forEach(s => {
+    s.y += s.speed;
+    if (s.y > H) s.y = 0;
+  });
+
+  ship.x += (mx - ship.x) * 0.1;
+  ship.x = Math.max(22, Math.min(W - 22, ship.x));
   ship.fireT--;
-  if(ship.fireT<=0){
-    ship.fireT=20;
-    bullets.push({x:ship.x-8,y:ship.y-10,vy:-8,player:true});
-    bullets.push({x:ship.x+8,y:ship.y-10,vy:-8,player:true});
+
+  if (ship.fireT <= 0) {
+    ship.fireT = 18;
+    bullets.push({ x: ship.x - 9, y: ship.y - 12, vy: -9, player: true });
+    bullets.push({ x: ship.x + 9, y: ship.y - 12, vy: -9, player: true });
   }
-  if(!novaActive)novaCharge=Math.min(1,novaCharge+0.0025);
-  if(novaActive){
-    novaR+=16;
-    const maxR=W*0.72;
-    if(novaR>maxR){novaActive=false;}
-    else{
-      enemies.forEach(e=>{
-        if(e.dead)return;
-        const dx=e.x-W/2,dy=e.y-H*0.5;
-        if(Math.sqrt(dx*dx+dy*dy)<novaR+e.r){
-          e.dead=true;addParticles(e.x,e.y,e.type===3?'#ff2d78':'#ff6b2a',14);
-          score+=e.type===3?3000:150;
+
+  if (!novaActive) novaCharge = Math.min(1, novaCharge + 0.0022);
+
+  if (novaActive) {
+    novaR += 18;
+    const maxR = W * 0.78;
+    if (novaR > maxR) {
+      novaActive = false;
+    } else {
+      enemies.forEach(e => {
+        if (e.dead) return;
+        const dx = e.x - W / 2, dy = e.y - H * 0.45;
+        if (Math.sqrt(dx * dx + dy * dy) < novaR + e.r) {
+          e.dead = true;
+          addParticles(e.x, e.y, e.type === 3 ? PINK : ORANGE, 18);
+          score += e.type === 3 ? 3000 : 180;
         }
       });
     }
   }
-  spawnTimer++;
-  spawnQ=spawnQ.filter(s=>{if(spawnTimer>=s.delay){spawnEnemy(s.type);return false;}return true;});
 
-  for(let i=bullets.length-1;i>=0;i--){
-    const b=bullets[i];
-    if(b.vx)b.x+=b.vx;
-    b.y+=b.vy;
-    if(b.y<-20||b.y>H+20||b.x<-20||b.x>W+20){bullets.splice(i,1);continue;}
-    if(b.player){
-      let hit=false;
-      for(let j=enemies.length-1;j>=0;j--){
-        const e=enemies[j];if(e.dead)continue;
-        const dx=b.x-e.x,dy=b.y-e.y;
-        if(Math.sqrt(dx*dx+dy*dy)<e.r+5){
-          e.hp--;addParticles(b.x,b.y,'#00e5ff',3);
-          if(e.hp<=0){
-            e.dead=true;
-            addParticles(e.x,e.y,e.type===3?'#ff2d78':e.type===2?'#ff6b2a':'#00e5ff',10);
-            score+=e.type===3?5000:e.type===2?300:e.type===1?175:80;
-            novaCharge=Math.min(1,novaCharge+0.12);
+  spawnTimer++;
+  spawnQ = spawnQ.filter(s => {
+    if (spawnTimer >= s.delay) { spawnEnemy(s.type); return false; }
+    return true;
+  });
+
+  // Bullets
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const b = bullets[i];
+    if (b.vx) b.x += b.vx;
+    b.y += b.vy;
+    if (b.y < -20 || b.y > H + 20 || b.x < -20 || b.x > W + 20) { bullets.splice(i, 1); continue; }
+    if (b.player) {
+      for (let j = enemies.length - 1; j >= 0; j--) {
+        const e = enemies[j]; if (e.dead) continue;
+        const dx = b.x - e.x, dy = b.y - e.y;
+        if (Math.sqrt(dx * dx + dy * dy) < e.r + 5) {
+          e.hp--;
+          addParticles(b.x, b.y, CYAN, 4);
+          if (e.hp <= 0) {
+            e.dead = true;
+            addParticles(e.x, e.y, e.type === 3 ? PINK : e.type === 2 ? ORANGE : CYAN, 12);
+            score += e.type === 3 ? 5000 : e.type === 2 ? 350 : e.type === 1 ? 200 : 90;
+            novaCharge = Math.min(1, novaCharge + 0.13);
           }
-          bullets.splice(i,1);hit=true;break;
+          bullets.splice(i, 1); break;
         }
       }
     } else {
-      const dx=b.x-ship.x,dy=b.y-ship.y;
-      if(Math.sqrt(dx*dx+dy*dy)<15){bullets.splice(i,1);loseLife();}
+      const dx = b.x - ship.x, dy = b.y - ship.y;
+      if (Math.sqrt(dx * dx + dy * dy) < 16) { bullets.splice(i, 1); loseLife(); }
     }
   }
 
-  enemies=enemies.filter(e=>!e.dead);
-  enemies.forEach(e=>{
-    e.phase+=0.03;
-    e.x+=e.vx+Math.sin(e.phase)*0.6;
-    if(e.type===3){
-      if(!e.settled)e.y+=e.vy;
-      if(e.y>H*0.18)e.settled=true;
-      e.x+=Math.sin(e.phase*0.6)*1.2;
+  // Enemies
+  enemies = enemies.filter(e => !e.dead);
+  enemies.forEach(e => {
+    e.phase += 0.03;
+    e.x += e.vx + Math.sin(e.phase) * 0.65;
+    if (e.type === 3) {
+      if (!e.settled) e.y += e.vy;
+      if (e.y > H * 0.17) e.settled = true;
+      e.x += Math.sin(e.phase * 0.55) * 1.4;
     } else {
-      e.y+=e.vy;
+      e.y += e.vy;
     }
-    if(e.x<e.r||e.x>W-e.r)e.vx*=-1;
-    if(e.type===2||e.type===3){
+    if (e.x < e.r || e.x > W - e.r) e.vx *= -1;
+    if (e.type === 2 || e.type === 3) {
       e.shootT--;
-      if(e.shootT<=0){
-        e.shootT=e.type===3?50:110;
-        if(e.type===3){
-          for(let k=0;k<6;k++){
-            const a=(k/6)*Math.PI*2+e.phase;
-            bullets.push({x:e.x,y:e.y,vx:Math.cos(a)*2,vy:Math.sin(a)*2,player:false,col:'#ff2d78'});
+      if (e.shootT <= 0) {
+        e.shootT = e.type === 3 ? 48 : 100;
+        if (e.type === 3) {
+          for (let k = 0; k < 6; k++) {
+            const a = (k / 6) * Math.PI * 2 + e.phase;
+            bullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * 2.2, vy: Math.sin(a) * 2.2, player: false, col: PINK });
           }
         } else {
-          const a=Math.atan2(ship.y-e.y,ship.x-e.x);
-          bullets.push({x:e.x,y:e.y,vx:Math.cos(a)*2.2,vy:Math.sin(a)*2.2,player:false,col:'#ff6b2a'});
+          const a = Math.atan2(ship.y - e.y, ship.x - e.x);
+          bullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * 2.4, vy: Math.sin(a) * 2.4, player: false, col: ORANGE });
         }
       }
     }
-    if(e.y>H+e.r){e.dead=true;loseLife();}
-    const dx=e.x-ship.x,dy=e.y-ship.y;
-    if(Math.sqrt(dx*dx+dy*dy)<e.r+13){e.dead=true;loseLife();}
+    if (e.y > H + e.r) { e.dead = true; loseLife(); }
+    const dx = e.x - ship.x, dy = e.y - ship.y;
+    if (Math.sqrt(dx * dx + dy * dy) < e.r + 14) { e.dead = true; loseLife(); }
   });
 
-  for(let i=particles.length-1;i>=0;i--){
-    const p=particles[i];
-    p.x+=p.vx;p.y+=p.vy;p.vy+=0.05;p.life-=0.022;
-    if(p.life<=0)particles.splice(i,1);
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.06;
+    p.life -= 0.02;
+    if (p.life <= 0) particles.splice(i, 1);
   }
-  if(waveMsgTimer>0)waveMsgTimer--;
-  if(spawnQ.length===0&&enemies.length===0&&!waveComplete){
-    waveComplete=true;
-    setTimeout(()=>{if(!gameOver){spawnTimer=0;nextWave();}},1800);
+
+  if (waveMsgTimer > 0) waveMsgTimer--;
+  if (spawnQ.length === 0 && enemies.length === 0 && !waveComplete) {
+    waveComplete = true;
+    setTimeout(() => { if (!gameOver) { spawnTimer = 0; nextWave(); } }, 1800);
   }
 }
 
-function drawEclipse(){
-  const cx=W/2,cy=H*0.5,cr=34,t=Date.now()/1000;
-  for(let i=3;i>=0;i--){
-    ctx.beginPath();ctx.arc(cx,cy,cr+i*9,0,Math.PI*2);
-    ctx.strokeStyle=i%2===0?'#ff6b2a':'#ff2d78';
-    ctx.globalAlpha=0.05-i*0.008;ctx.lineWidth=7;ctx.stroke();
-  }
-  ctx.globalAlpha=1;
-  ctx.beginPath();ctx.arc(cx,cy,cr,0,Math.PI*2);ctx.fillStyle='#080010';ctx.fill();
-  ctx.beginPath();ctx.arc(cx+9,cy,cr*0.87,0,Math.PI*2);ctx.fillStyle='#ff6b2a';ctx.fill();
-  ctx.beginPath();ctx.arc(cx+2,cy,cr*0.79,0,Math.PI*2);ctx.fillStyle='#080010';ctx.fill();
-  const oa=t*1.1;
-  ctx.beginPath();ctx.arc(cx+Math.cos(oa)*(cr+16),cy+Math.sin(oa)*(cr+16),3,0,Math.PI*2);
-  ctx.fillStyle='#00e5ff';ctx.globalAlpha=0.9;ctx.fill();ctx.globalAlpha=1;
-  ctx.fillStyle='#ff6b2a';ctx.font='bold 8px monospace';ctx.textAlign='center';
-  ctx.fillText('ECLIPSE CORE',cx,cy+cr+18);
-  for(let i=0;i<3;i++){
-    ctx.beginPath();ctx.arc(cx-20+i*20,cy+cr+32,5,0,Math.PI*2);
-    ctx.fillStyle=i<lives?'#00e5ff':'#1a0010';ctx.fill();
-  }
+// ── DRAW ──
+
+function drawStars() {
+  stars.forEach(s => {
+    ctx.globalAlpha = s.opacity;
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
 }
 
-function drawShip(){
-  const t=Date.now()/1000;
-  ctx.save();ctx.translate(ship.x,ship.y);
-  ctx.beginPath();ctx.moveTo(-5,14);ctx.lineTo(0,14+7+Math.sin(t*14)*3);ctx.lineTo(5,14);
-  ctx.fillStyle='#ff6b2a';ctx.globalAlpha=0.85;ctx.fill();ctx.globalAlpha=1;
+function drawEclipseCore() {
+  const cx = W / 2, cy = H * 0.45, cr = 36, t = Date.now() / 1000;
+
+  // Outer pulse rings
+  for (let i = 3; i >= 0; i--) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, cr + i * 11 + Math.sin(t + i) * 2, 0, Math.PI * 2);
+    ctx.strokeStyle = i % 2 === 0 ? ORANGE : PINK;
+    ctx.globalAlpha = 0.04 - i * 0.006;
+    ctx.lineWidth = 8;
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  // Eclipse body (golden/orange)
   ctx.beginPath();
-  ctx.moveTo(0,-18);ctx.lineTo(-13,14);ctx.lineTo(-5,8);ctx.lineTo(0,11);ctx.lineTo(5,8);ctx.lineTo(13,14);
-  ctx.closePath();ctx.fillStyle='#001820';ctx.fill();
-  ctx.strokeStyle='#00e5ff';ctx.lineWidth=1.5;ctx.stroke();
-  ctx.beginPath();ctx.ellipse(0,-4,4,7,0,0,Math.PI*2);
-  ctx.fillStyle='#00e5ff';ctx.globalAlpha=0.75;ctx.fill();ctx.globalAlpha=1;
+  ctx.arc(cx, cy, cr, 0, Math.PI * 2);
+  const grad = ctx.createRadialGradient(cx + 10, cy - 8, 2, cx, cy, cr);
+  grad.addColorStop(0, '#ffaa00');
+  grad.addColorStop(0.5, ORANGE);
+  grad.addColorStop(1, PINK);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Shadow circle creates crescent
+  ctx.beginPath();
+  ctx.arc(cx + 11, cy, cr * 0.88, 0, Math.PI * 2);
+  ctx.fillStyle = '#000000';
+  ctx.fill();
+
+  // Cyan rim
+  ctx.beginPath();
+  ctx.arc(cx, cy, cr, 0, Math.PI * 2);
+  ctx.strokeStyle = CYAN;
+  ctx.globalAlpha = 0.35;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  // Orbiting dot
+  const oa = t * 1.15;
+  const odx = Math.cos(oa) * (cr + 18), ody = Math.sin(oa) * (cr + 18);
+  ctx.beginPath();
+  ctx.arc(cx + odx, cy + ody, 3.5, 0, Math.PI * 2);
+  ctx.fillStyle = CYAN;
+  ctx.globalAlpha = 0.95;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Label
+  ctx.fillStyle = ORANGE;
+  ctx.font = '700 8px "Orbitron", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('ECLIPSE CORE', cx, cy + cr + 20);
+
+  // Lives
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.arc(cx - 22 + i * 22, cy + cr + 36, 5.5, 0, Math.PI * 2);
+    ctx.fillStyle = i < lives ? CYAN : '#0a0014';
+    ctx.fill();
+    if (i < lives) {
+      ctx.strokeStyle = CYAN;
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+  }
+}
+
+function drawShip() {
+  const t = Date.now() / 1000;
+  ctx.save();
+  ctx.translate(ship.x, ship.y);
+
+  // Engine exhaust
+  ctx.beginPath();
+  ctx.moveTo(-6, 15);
+  ctx.lineTo(0, 15 + 8 + Math.sin(t * 16) * 4);
+  ctx.lineTo(6, 15);
+  ctx.fillStyle = ORANGE;
+  ctx.globalAlpha = 0.9;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Side exhausts
+  ctx.beginPath();
+  ctx.moveTo(-12, 10);
+  ctx.lineTo(-14, 14 + Math.sin(t * 14 + 1) * 3);
+  ctx.lineTo(-10, 10);
+  ctx.fillStyle = CYAN;
+  ctx.globalAlpha = 0.6;
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(12, 10);
+  ctx.lineTo(14, 14 + Math.sin(t * 14) * 3);
+  ctx.lineTo(10, 10);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Ship body
+  ctx.beginPath();
+  ctx.moveTo(0, -20);
+  ctx.lineTo(-14, 15);
+  ctx.lineTo(-6, 9);
+  ctx.lineTo(0, 13);
+  ctx.lineTo(6, 9);
+  ctx.lineTo(14, 15);
+  ctx.closePath();
+  ctx.fillStyle = '#001820';
+  ctx.fill();
+  ctx.strokeStyle = CYAN;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Cockpit
+  ctx.beginPath();
+  ctx.ellipse(0, -4, 4.5, 7, 0, 0, Math.PI * 2);
+  ctx.fillStyle = CYAN;
+  ctx.globalAlpha = 0.8;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
   ctx.restore();
 }
 
-function drawXeno(e){
-  const t=Date.now()/1000;
-  ctx.save();ctx.translate(e.x,e.y);
-  const ac=e.type===0?'#00e5ff':e.type===1?'#ff2d78':e.type===2?'#ff6b2a':'#ff2d78';
-  const bc=e.type===0?'#001a10':e.type===1?'#1a000d':e.type===2?'#1a0800':'#100018';
-  if(e.type===3){
-    ctx.beginPath();ctx.ellipse(0,0,e.r*0.55,e.r*0.82,0,0,Math.PI*2);
-    ctx.fillStyle=bc;ctx.fill();ctx.strokeStyle=ac;ctx.lineWidth=2;ctx.stroke();
-    ctx.beginPath();ctx.ellipse(0,-e.r*0.55,e.r*0.3,e.r*0.45,0,0,Math.PI*2);
-    ctx.fillStyle='#080018';ctx.fill();ctx.strokeStyle=ac;ctx.lineWidth=1;ctx.stroke();
-    for(let k=-2;k<=2;k++){
-      ctx.beginPath();ctx.moveTo(k*10,-e.r*0.78);ctx.lineTo(k*7,-e.r*1.05);
-      ctx.strokeStyle=ac;ctx.lineWidth=1.5;ctx.stroke();
+function drawXeno(e) {
+  const t = Date.now() / 1000;
+  ctx.save();
+  ctx.translate(e.x, e.y);
+
+  const ac = e.type === 0 ? CYAN : e.type === 1 ? PINK : e.type === 2 ? ORANGE : PINK;
+  const bc = e.type === 0 ? '#001a10' : e.type === 1 ? '#1a000d' : e.type === 2 ? '#1a0800' : '#100018';
+
+  if (e.type === 3) {
+    // BOSS
+    ctx.beginPath();
+    ctx.ellipse(0, 0, e.r * 0.55, e.r * 0.82, 0, 0, Math.PI * 2);
+    ctx.fillStyle = bc; ctx.fill();
+    ctx.strokeStyle = ac; ctx.lineWidth = 2; ctx.stroke();
+
+    ctx.beginPath();
+    ctx.ellipse(0, -e.r * 0.55, e.r * 0.3, e.r * 0.46, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#080018'; ctx.fill();
+    ctx.strokeStyle = ac; ctx.lineWidth = 1; ctx.stroke();
+
+    for (let k = -2; k <= 2; k++) {
+      ctx.beginPath();
+      ctx.moveTo(k * 10, -e.r * 0.78);
+      ctx.lineTo(k * 7, -e.r * 1.08);
+      ctx.strokeStyle = ac; ctx.lineWidth = 1.5; ctx.stroke();
     }
-    ctx.fillStyle=ac;ctx.globalAlpha=0.9;
-    ctx.beginPath();ctx.arc(-16,-e.r*0.45,7,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(16,-e.r*0.45,7,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#000';
-    ctx.beginPath();ctx.arc(-16,-e.r*0.45,3.5,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(16,-e.r*0.45,3.5,0,Math.PI*2);ctx.fill();
-    ctx.globalAlpha=1;
-    for(let k=0;k<4;k++){
-      const a=Math.PI*0.55+k*Math.PI*0.28+Math.sin(t*2+k)*0.15;
-      ctx.beginPath();ctx.moveTo(Math.cos(a)*e.r*0.5,Math.sin(a)*e.r*0.5);
-      ctx.lineTo(Math.cos(a)*e.r*0.92,Math.sin(a)*e.r*0.92);
-      ctx.strokeStyle=ac;ctx.lineWidth=1.2;ctx.globalAlpha=0.55;ctx.stroke();ctx.globalAlpha=1;
+
+    ctx.fillStyle = ac; ctx.globalAlpha = 0.9;
+    ctx.beginPath(); ctx.arc(-17, -e.r * 0.45, 7.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(17, -e.r * 0.45, 7.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(-17, -e.r * 0.45, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(17, -e.r * 0.45, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Tentacles
+    for (let k = 0; k < 5; k++) {
+      const a = Math.PI * 0.5 + k * Math.PI * 0.25 + Math.sin(t * 2 + k) * 0.18;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a) * e.r * 0.5, Math.sin(a) * e.r * 0.5);
+      ctx.lineTo(Math.cos(a) * e.r * 0.95, Math.sin(a) * e.r * 0.95);
+      ctx.strokeStyle = ac; ctx.lineWidth = 1.3; ctx.globalAlpha = 0.6; ctx.stroke();
+      ctx.globalAlpha = 1;
     }
   } else {
-    ctx.beginPath();ctx.ellipse(0,2,e.r*0.52,e.r*0.78,0,0,Math.PI*2);
-    ctx.fillStyle=bc;ctx.fill();ctx.strokeStyle=ac;ctx.lineWidth=1.2;ctx.stroke();
-    ctx.beginPath();ctx.ellipse(0,-e.r*0.55,e.r*0.28,e.r*0.42,0,0,Math.PI*2);
-    ctx.fillStyle=bc;ctx.fill();ctx.strokeStyle=ac;ctx.lineWidth=0.8;ctx.stroke();
-    ctx.fillStyle=ac;ctx.globalAlpha=0.9;
-    ctx.beginPath();ctx.arc(-e.r*0.13,-e.r*0.55,e.r*0.1,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(e.r*0.13,-e.r*0.55,e.r*0.1,0,Math.PI*2);ctx.fill();
-    ctx.globalAlpha=1;
-    ctx.strokeStyle=ac;ctx.lineWidth=1;ctx.globalAlpha=0.45;
-    ctx.beginPath();ctx.moveTo(-e.r*0.38,0);ctx.lineTo(-e.r*0.85,e.r*0.38+Math.sin(t*3+e.phase)*3);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(e.r*0.38,0);ctx.lineTo(e.r*0.85,e.r*0.38+Math.sin(t*3+e.phase+1)*3);ctx.stroke();
-    ctx.globalAlpha=1;
-    ctx.beginPath();ctx.moveTo(0,e.r*0.65);
-    ctx.quadraticCurveTo(e.r*0.4,e.r*1.05,0,e.r*1.35+Math.sin(t*4)*3);
-    ctx.strokeStyle=ac;ctx.lineWidth=1.3;ctx.globalAlpha=0.5;ctx.stroke();ctx.globalAlpha=1;
+    // Regular alien
+    ctx.beginPath();
+    ctx.ellipse(0, 2, e.r * 0.52, e.r * 0.78, 0, 0, Math.PI * 2);
+    ctx.fillStyle = bc; ctx.fill(); ctx.strokeStyle = ac; ctx.lineWidth = 1.2; ctx.stroke();
+
+    ctx.beginPath();
+    ctx.ellipse(0, -e.r * 0.55, e.r * 0.28, e.r * 0.44, 0, 0, Math.PI * 2);
+    ctx.fillStyle = bc; ctx.fill(); ctx.strokeStyle = ac; ctx.lineWidth = 0.8; ctx.stroke();
+
+    ctx.fillStyle = ac; ctx.globalAlpha = 0.9;
+    ctx.beginPath(); ctx.arc(-e.r * 0.14, -e.r * 0.55, e.r * 0.11, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(e.r * 0.14, -e.r * 0.55, e.r * 0.11, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.strokeStyle = ac; ctx.lineWidth = 1; ctx.globalAlpha = 0.45;
+    ctx.beginPath(); ctx.moveTo(-e.r * 0.4, 0); ctx.lineTo(-e.r * 0.9, e.r * 0.4 + Math.sin(t * 3 + e.phase) * 3); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(e.r * 0.4, 0); ctx.lineTo(e.r * 0.9, e.r * 0.4 + Math.sin(t * 3 + e.phase + 1) * 3); ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    ctx.beginPath();
+    ctx.moveTo(0, e.r * 0.65);
+    ctx.quadraticCurveTo(e.r * 0.4, e.r * 1.08, 0, e.r * 1.38 + Math.sin(t * 4) * 3);
+    ctx.strokeStyle = ac; ctx.lineWidth = 1.3; ctx.globalAlpha = 0.5; ctx.stroke(); ctx.globalAlpha = 1;
   }
-  const label=e.type===0?'XENO DRONE':e.type===1?'XENO HUNTER':e.type===2?'XENO SPITTER':'XENO PRIME';
-  ctx.fillStyle=ac;ctx.font='bold 7px monospace';ctx.textAlign='center';
-  ctx.globalAlpha=0.7;ctx.fillText(label,0,-e.r-10);ctx.globalAlpha=1;
-  if(e.maxHp>1){
-    ctx.fillStyle='#111';ctx.fillRect(-e.r,-e.r-8,e.r*2,4);
-    ctx.fillStyle=ac;ctx.fillRect(-e.r,-e.r-8,e.r*2*(e.hp/e.maxHp),4);
+
+  // Name label
+  const labels = ['XENO DRONE', 'XENO HUNTER', 'XENO SPITTER', 'XENO PRIME'];
+  ctx.fillStyle = ac;
+  ctx.font = '700 7px "Share Tech Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.globalAlpha = 0.75;
+  ctx.fillText(labels[e.type] || 'XENO', 0, -e.r - 10);
+  ctx.globalAlpha = 1;
+
+  // Health bar
+  if (e.maxHp > 1) {
+    ctx.fillStyle = '#111';
+    ctx.fillRect(-e.r, -e.r - 8, e.r * 2, 4);
+    ctx.fillStyle = ac;
+    ctx.fillRect(-e.r, -e.r - 8, e.r * 2 * (e.hp / e.maxHp), 4);
   }
+
   ctx.restore();
 }
 
-function draw(){
-  ctx.fillStyle='#000008';ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle='rgba(0,229,255,0.04)';ctx.lineWidth=1;
-  for(let i=0;i<W;i+=40){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,H);ctx.stroke();}
-  for(let j=0;j<H;j+=40){ctx.beginPath();ctx.moveTo(0,j);ctx.lineTo(W,j);ctx.stroke();}
-  drawEclipse();
-  if(novaActive){
-    const maxR=W*0.72,alpha=1-novaR/maxR;
-    ctx.globalAlpha=alpha;
-    ctx.beginPath();ctx.arc(W/2,H*0.5,novaR,0,Math.PI*2);
-    ctx.strokeStyle='#ff6b2a';ctx.lineWidth=5;ctx.stroke();
-    ctx.beginPath();ctx.arc(W/2,H*0.5,novaR*0.85,0,Math.PI*2);
-    ctx.strokeStyle='#00e5ff';ctx.lineWidth=2;ctx.stroke();
-    ctx.globalAlpha=1;
+function draw() {
+  // Clear
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0, 0, W, H);
+
+  // Stars
+  drawStars();
+
+  // Subtle grid
+  ctx.strokeStyle = 'rgba(0,229,255,0.03)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < W; i += 40) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, H); ctx.stroke(); }
+  for (let j = 0; j < H; j += 40) { ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(W, j); ctx.stroke(); }
+
+  // Eclipse Core
+  drawEclipseCore();
+
+  // Nova bomb wave
+  if (novaActive) {
+    const maxR = W * 0.78, alpha = 1 - novaR / maxR;
+    ctx.globalAlpha = alpha * 0.8;
+    ctx.beginPath(); ctx.arc(W / 2, H * 0.45, novaR, 0, Math.PI * 2);
+    ctx.strokeStyle = ORANGE; ctx.lineWidth = 6; ctx.stroke();
+    ctx.beginPath(); ctx.arc(W / 2, H * 0.45, novaR * 0.82, 0, Math.PI * 2);
+    ctx.strokeStyle = CYAN; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(W / 2, H * 0.45, novaR * 0.65, 0, Math.PI * 2);
+    ctx.strokeStyle = PINK; ctx.lineWidth = 1; ctx.stroke();
+    ctx.globalAlpha = 1;
   }
-  enemies.forEach(e=>{if(!e.dead)drawXeno(e);});
-  bullets.forEach(b=>{
-    if(b.player){
-      ctx.fillStyle='#00e5ff';ctx.shadowColor='#00e5ff';ctx.shadowBlur=7;
-      ctx.fillRect(b.x-2,b.y-6,4,12);ctx.shadowBlur=0;
+
+  // Enemies
+  enemies.forEach(e => { if (!e.dead) drawXeno(e); });
+
+  // Bullets
+  bullets.forEach(b => {
+    if (b.player) {
+      ctx.fillStyle = CYAN;
+      ctx.shadowColor = CYAN;
+      ctx.shadowBlur = 8;
+      ctx.fillRect(b.x - 2, b.y - 7, 4, 14);
+      ctx.shadowBlur = 0;
     } else {
-      ctx.beginPath();ctx.arc(b.x,b.y,5,0,Math.PI*2);
-      ctx.fillStyle=b.col||'#ff2d78';ctx.fill();
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, 5.5, 0, Math.PI * 2);
+      ctx.fillStyle = b.col || PINK;
+      ctx.shadowColor = b.col;
+      ctx.shadowBlur = 6;
+      ctx.fill();
+      ctx.shadowBlur = 0;
     }
   });
-  particles.forEach(p=>{
-    ctx.globalAlpha=p.life;ctx.fillStyle=p.col;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+
+  // Particles
+  particles.forEach(p => {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.col;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
   });
-  ctx.globalAlpha=1;
+  ctx.globalAlpha = 1;
+
+  // Ship
   drawShip();
-  ctx.fillStyle='#ff6b2a';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('SCORE',10,16);
-  ctx.fillStyle='#00e5ff';ctx.font='bold 15px monospace';ctx.fillText(score.toLocaleString(),10,30);
-  ctx.fillStyle='#ff6b2a';ctx.font='8px monospace';ctx.textAlign='right';ctx.fillText('WAVE',W-10,16);
-  ctx.fillStyle='#00e5ff';ctx.font='bold 15px monospace';ctx.fillText(wave,W-10,30);
-  ctx.fillStyle='#0a0a0a';ctx.fillRect(10,H-18,130,8);
-  ctx.fillStyle=novaCharge>=1?'#ff6b2a':'#004455';
-  ctx.fillRect(10,H-18,130*novaCharge,8);
-  ctx.strokeStyle=novaCharge>=1?'#ff6b2a':'#222';ctx.lineWidth=1;ctx.strokeRect(10,H-18,130,8);
-  ctx.fillStyle=novaCharge>=1?'#ff6b2a':'#444';ctx.font='8px monospace';ctx.textAlign='left';
-  ctx.fillText(novaCharge>=1?'NOVA READY — CLICK!':'NOVA CHARGING...',10,H-22);
-  if(waveMsgTimer>0){
-    ctx.globalAlpha=Math.min(1,waveMsgTimer/25);
-    ctx.fillStyle='#ff6b2a';ctx.font='bold 28px monospace';ctx.textAlign='center';
-    ctx.fillText(waveMsg,W/2,75);ctx.globalAlpha=1;
+
+  // ── HUD ──
+  // Score
+  ctx.fillStyle = ORANGE;
+  ctx.font = '700 9px "Orbitron", monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('SCORE', 12, 18);
+  ctx.fillStyle = CYAN;
+  ctx.font = '700 16px "Orbitron", monospace';
+  ctx.fillText(score.toLocaleString(), 12, 35);
+
+  // Wave
+  ctx.fillStyle = ORANGE;
+  ctx.font = '700 9px "Orbitron", monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText('WAVE', W - 12, 18);
+  ctx.fillStyle = CYAN;
+  ctx.font = '700 16px "Orbitron", monospace';
+  ctx.fillText(wave, W - 12, 35);
+
+  // Nova bar
+  const barX = 12, barY = H - 22, barW = 140, barH = 8;
+  ctx.fillStyle = '#0a0010';
+  ctx.fillRect(barX, barY, barW, barH);
+
+  if (novaCharge >= 1) {
+    // Pulsing when ready
+    const pulse = 0.7 + Math.sin(Date.now() / 150) * 0.3;
+    ctx.fillStyle = ORANGE;
+    ctx.globalAlpha = pulse;
+  } else {
+    ctx.fillStyle = '#003344';
+    ctx.globalAlpha = 1;
   }
-  ctx.fillStyle='rgba(0,229,255,0.025)';
-  ctx.fillRect(0,(Date.now()/18)%H,W,9);
+  ctx.fillRect(barX, barY, barW * novaCharge, barH);
+  ctx.globalAlpha = 1;
+
+  ctx.strokeStyle = novaCharge >= 1 ? ORANGE : '#222';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(barX, barY, barW, barH);
+
+  ctx.fillStyle = novaCharge >= 1 ? ORANGE : '#444';
+  ctx.font = '700 8px "Orbitron", monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText(novaCharge >= 1 ? '⚡ NOVA READY — CLICK!' : 'NOVA CHARGING...', barX, barY - 5);
+
+  // Wave message
+  if (waveMsgTimer > 0) {
+    ctx.globalAlpha = Math.min(1, waveMsgTimer / 28);
+    ctx.fillStyle = ORANGE;
+    ctx.font = '900 30px "Orbitron", monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = ORANGE;
+    ctx.shadowBlur = 20;
+    ctx.fillText(waveMsg, W / 2, 78);
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+  }
+
+  // Scanline
+  ctx.fillStyle = 'rgba(0,229,255,0.018)';
+  ctx.fillRect(0, (Date.now() / 16) % H, W, 8);
 }
 
-function showGameOver(){
-  ov.innerHTML=`
-    <h1 style="color:#ff2d78;letter-spacing:6px;">OBLITERATED</h1>
-    <div class="xsub">XENO HORDE WINS</div>
-    <div style="font-size:32px;font-weight:bold;color:#00e5ff;margin-bottom:6px;">${score.toLocaleString()}</div>
-    <div style="font-size:12px;color:#555;margin-bottom:28px;">WAVE ${wave} &nbsp;·&nbsp; FINAL SCORE</div>
-    <button id="startBtn">RETRY</button>
+function showGameOver() {
+  ov.innerHTML = `
+    <svg class="eclipse-logo" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="eg2" cx="65%" cy="40%" r="55%">
+          <stop offset="0%" stop-color="#ffaa00"/>
+          <stop offset="55%" stop-color="#ff6b2a"/>
+          <stop offset="100%" stop-color="#ff2d78"/>
+        </radialGradient>
+      </defs>
+      <circle cx="45" cy="42" r="26" fill="url(#eg2)"/>
+      <circle cx="52" cy="42" r="22" fill="#000000"/>
+      <circle cx="45" cy="42" r="26" fill="none" stroke="rgba(0,229,255,0.35)" stroke-width="1.5"/>
+    </svg>
+    <div class="studio-name">XENCLIPSE STUDIOS</div>
+    <h1 style="color:${PINK};text-shadow:0 0 30px rgba(255,45,120,0.6)">OBLITERATED</h1>
+    <div class="sub">XENO HORDE WINS</div>
+    <div style="font-family:'Orbitron',monospace;font-size:36px;font-weight:900;color:${CYAN};margin-bottom:4px;text-shadow:0 0 20px rgba(0,229,255,0.5)">${score.toLocaleString()}</div>
+    <div style="font-size:11px;color:#444;margin-bottom:24px;letter-spacing:3px">WAVE ${wave} &nbsp;·&nbsp; FINAL SCORE</div>
+    <div class="btn-row">
+      <button id="startBtn" class="orange">↺ RETRY</button>
+    </div>
   `;
-  ov.style.display='flex';
-  document.getElementById('startBtn').onclick=()=>{ov.style.display='none';reset();};
+  ov.style.display = 'flex';
+  document.getElementById('startBtn').onclick = () => { ov.style.display = 'none'; reset(); };
 }
 
-function gameLoop(){
-  if(!running)return;
-  update();draw();requestAnimationFrame(gameLoop);
+function gameLoop() {
+  if (!running) return;
+  update(); draw();
+  requestAnimationFrame(gameLoop);
 }
 
-cv.addEventListener('mousemove',e=>{
-  const r=cv.getBoundingClientRect(),sx=cv.width/r.width;
-  mx=(e.clientX-r.left)*sx;
+// Input
+cv.addEventListener('mousemove', e => {
+  const r = cv.getBoundingClientRect(), sx = cv.width / r.width;
+  mx = (e.clientX - r.left) * sx;
 });
-cv.addEventListener('click',()=>{if(running&&!gameOver)nova();});
-cv.addEventListener('touchmove',e=>{
+cv.addEventListener('click', () => { if (running && !gameOver) nova(); });
+cv.addEventListener('touchmove', e => {
   e.preventDefault();
-  const r=cv.getBoundingClientRect(),sx=cv.width/r.width;
-  mx=(e.touches[0].clientX-r.left)*sx;
-},{passive:false});
-cv.addEventListener('touchstart',e=>{
+  const r = cv.getBoundingClientRect(), sx = cv.width / r.width;
+  mx = (e.touches[0].clientX - r.left) * sx;
+}, { passive: false });
+cv.addEventListener('touchstart', e => {
   e.preventDefault();
-  if(running&&!gameOver)nova();
-  const r=cv.getBoundingClientRect(),sx=cv.width/r.width;
-  mx=(e.touches[0].clientX-r.left)*sx;
-},{passive:false});
+  if (running && !gameOver) nova();
+  const r = cv.getBoundingClientRect(), sx = cv.width / r.width;
+  mx = (e.touches[0].clientX - r.left) * sx;
+}, { passive: false });
 
-document.getElementById('startBtn').onclick=()=>{
-  ov.style.display='none';
-  running=true;reset();gameLoop();
+document.getElementById('startBtn').onclick = () => {
+  ov.style.display = 'none';
+  running = true;
+  reset();
+  gameLoop();
 };
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done"
-
-
-
-
